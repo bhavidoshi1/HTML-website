@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>More Volleyball!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #eaf5fc;
+      color: #1e3a52;
+      font-family: "Source Serif 4", Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    header {
+      background-color: #a9d8f5;
+      padding: 20px;
+      text-align: center;
+    }
+
+    nav a {
+      display: inline-block;
+      margin: 5px;
+      padding: 8px 18px;
+      background-color: white;
+      color: #1e3a52;
+      font-family: "Bricolage Grotesque", Arial, sans-serif;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 20px;
+    }
+
+    nav a:hover,
+    nav a.active {
+      background-color: #1e3a52;
+      color: white;
+    }
+
+    main {
+      max-width: 750px;
+      margin: 40px auto;
+      padding: 40px;
+      background-color: white;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    section {
+      margin-bottom: 50px;
+    }
+
+    h2 {
+      font-family: "Bricolage Grotesque", Arial, sans-serif;
+      color: #2a7ab8;
+      font-size: 30px;
+      margin-top: 0;
+    }
+
+    p {
+      text-align: left;
+    }
+
+    img {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      border-radius: 12px;
+      border: 6px solid #a9d8f5;
+      transition: transform 0.3s;
+    }
+
+    img:hover {
+      transform: scale(1.05);
+    }
+
+    ol {
+      text-align: left;
+      background-color: #eaf5fc;
+      padding: 20px 20px 20px 50px;
+      border-radius: 12px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    li::marker {
+      color: #2a7ab8;
+      font-weight: 700;
+    }
+
+    #chart svg {
+      width: 100%;
+      height: auto;
+    }
+
+    .legend span {
+      display: inline-block;
+      margin: 0 10px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 15px;
+    }
+
+    .before {
+      background-color: #cfe8f8;
+    }
+
+    .after {
+      background-color: #2a7ab8;
+      color: white;
+    }
+
+    footer {
+      background-color: #a9d8f5;
+      padding: 30px;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      main {
+        margin: 20px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html">About Me</a>
+      <a href="volleyball.html" class="active">More Volleyball!</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Life on the Rooftop Court</h2>
+      <img src="img2.JPG" alt="Friends playing sand volleyball on a rooftop court with the city skyline behind them" width="400" height="500">
+      <p>
+One of the biggest adjustments for me was learning how to play on a sand court rather than a traditional indoor court. It took some time to get used to the different playing conditions, especially moving and jumping in the sand. When we first started playing, we usually played 8-on-8 because most of us were still learning the game and figuring out our strengths. As we became more comfortable and improved our skills, we gradually transitioned to 4-on-4, which challenged me to become a more versatile player and take on different positions. Being one of the taller players, I was often placed as a setter, although I quickly learned that height did not necessarily translate into setting skills 😅 I found that I enjoyed playing as an outside hitter the most, as I liked being able to read the ball, anticipate where it was going, and adjust my approach to make a strong hit. Playing 4-on-4 pushed me to become more aware of the court, communicate with my teammates, and develop skills beyond just hitting the ball. It also made the experience more rewarding as I could see my progress over time. </p>
+     
+    </section>
+
+    <section>
+      <h2>What our 3 hours really looked like</h2>
+      <ol>
+        <li>We started to warm up as peopel started to come in</li>
+        <li>Picked captains and started to divide everyone into teams</li>
+        <li>2 of the teams began to play, while the other team practiced on the side</li>
+        <li>Winner plays the third team, and water break!!</li>
+        <li>All just catching up and watching sunset before the last game</li>
+        <li>One last winner stays on game before heading home</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>How (I think) My Skills Grew</h2>
+      <p>Here's how I'd rate my own skills (out of 10) before I started playing on the rooftop compared to now. </p>
+      <div id="chart"></div>
+      <div class="legend">
+        <span class="before">Before the rooftop</span>
+        <span class="after">After the rooftop</span>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const data = [
+      { skill: "Serving",   before: 5, after: 8 },
+      { skill: "Passing",   before: 2, after: 8 },
+      { skill: "Setting",   before: 1, after: 3 },
+      { skill: "Hitting",   before: 5, after: 8 },
+      { skill: "Blocking",  before: 3, after: 6 },
+      { skill: "Endurance", before: 4, after: 9 }
+    ];
+
+    const width = 640;
+    const height = 350;
+    const margin = 40;
+
+    const svg = d3.select("#chart")
+      .append("svg")
+      .attr("viewBox", `0 0 ${width} ${height}`);
+
+    const x = d3.scaleBand()
+      .domain(data.map(d => d.skill))
+      .range([margin, width - margin])
+      .padding(0.3);
+
+    const y = d3.scaleLinear()
+      .domain([0, 10])
+      .range([height - margin, margin]);
+
+    svg.append("g")
+      .attr("transform", `translate(0, ${height - margin})`)
+      .call(d3.axisBottom(x));
+
+    svg.append("g")
+      .attr("transform", `translate(${margin}, 0)`)
+      .call(d3.axisLeft(y).ticks(5));
+
+    const barWidth = x.bandwidth() / 2;
+
+    svg.selectAll(".before-bar")
+      .data(data)
+      .join("rect")
+      .attr("x", d => x(d.skill))
+      .attr("y", d => y(d.before))
+      .attr("width", barWidth)
+      .attr("height", d => y(0) - y(d.before))
+      .attr("fill", "#cfe8f8");
+
+    svg.selectAll(".after-bar")
+      .data(data)
+      .join("rect")
+      .attr("x", d => x(d.skill) + barWidth)
+      .attr("y", d => y(d.after))
+      .attr("width", barWidth)
+      .attr("height", d => y(0) - y(d.after))
+      .attr("fill", "#2a7ab8");
+  </script>
+</body>
+</html>
